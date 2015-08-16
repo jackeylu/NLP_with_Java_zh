@@ -2,11 +2,11 @@
 
 ## How classification is used
 
-![word cloud](../img/Foundation-l_word_cloud_without_headers_and_quotes.png)
+![word cloud](img/Foundation-l_word_cloud_without_headers_and_quotes.png)
 
 ## Understanding sentiment analysis
 
-![2014-toyota-camry-expert-review](../img/2014-toyota-camry-expert-review.png)
+![2014-toyota-camry-expert-review](img/2014-toyota-camry-expert-review.png)
 
 ## Text classifying techniques
 
@@ -54,7 +54,7 @@
     }
 ```
 
-![output-for-OpenNLP](../img/output-for-OpenNLP.png)
+![output-for-OpenNLP](img/output-for-OpenNLP.png)
 
 #### Using DocumentCategorizerME to classify text
 
@@ -426,7 +426,7 @@ Best Category: soc.religion.christian
 ```
 #### Language identification using LingPipe
 
-![language-detection](../img/language-detection.png)
+![language-detection](img/language-detection.png)
 
 ```Java
     String text = "An overly sentimental film with a somewhat "
