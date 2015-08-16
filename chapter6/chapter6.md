@@ -296,18 +296,32 @@ Category: large
 #### Using other training categories
 
 
-|Newsgroups | |
-|comp.graphics| sci.crypt |
-|comp.os.ms-windows.misc |sci.electronics|
-|comp.sys.ibm.pc.hardware| sci.med|
-|comp.sys.mac.hardware| sci.space|
-|comp.windows.x| misc.forsale|
-|rec.autos| talk.politics.misc|
-|rec.motorcycles| talk.politics.guns|
-|rec.sport.baseball |talk.politics.mideast|
-|rec.sport.hockey |talk.religion.misc|
-|alt.atheism||
--------------------------------------
++---------------------------+-----------------------+
+| Newsgroups                |                       |
++===========================+=======================+
+|comp.graphics              | sci.crypt             | 
++---------------------------+-----------------------+
+|comp.os.ms-windows.misc    |sci.electronics        | 
++---------------------------+-----------------------+
+|comp.sys.ibm.pc.hardware   |sci.med                | 
++---------------------------+-----------------------+
+|comp.sys.mac.hardware      |sci.space              | 
++---------------------------+-----------------------+
+|comp.windows.x             |misc.forsale           | 
++---------------------------+-----------------------+
+|rec.autos                  |talk.politics.misc     | 
++---------------------------+-----------------------+
+|rec.motorcycles            |talk.politics.guns     |
++---------------------------+-----------------------+
+|rec.sport.baseball         |talk.politics.mideast  |
++---------------------------+-----------------------+
+|rec.sport.hockey           |talk.religion.misc     |
++---------------------------+-----------------------+
+|alt.atheism                |                       |
++---------------------------+-----------------------+
+
+
+
 
 #### Classifying text using LingPipe
 
@@ -459,6 +473,7 @@ Best Language: se
 ```
 
 ## Summary
+
 
 ## 本章术语对照表
 
