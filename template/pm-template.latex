@@ -14,6 +14,7 @@
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
 \usepackage{booktabs} % provides \toprule
+\usepackage{indentfirst} % 首行缩进
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
@@ -83,6 +84,8 @@ $if(tables)$
 $endif$
 $if(graphics)$
 \usepackage{graphicx}
+\newcommand{\tightlist}{% for markdown * list
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 % We will generate all images so they have a width \maxwidth. This means
 % that they will get their normal width if they fit onto the page, but
 % are scaled down if they would overflow the margins.
@@ -118,7 +121,7 @@ $if(strikeout)$
 % avoid problems with \sout in headers with hyperref:
 \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 $endif$
-\setlength{\parindent}{0pt}
+\setlength{\parindent}{2em}
 %\setlength{\parskip}{6pt plus 2pt minus 1pt}
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 
