@@ -1,4 +1,4 @@
-# Classifying Texts and Documents
+# 文本分类和文档分类 Classifying Texts and Documents
 
 ## How classification is used
 
