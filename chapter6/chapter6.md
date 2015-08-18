@@ -12,12 +12,12 @@
 
 文本分类可以用于许多不同的目的：
 
-* 垃圾邮件检测
-* 作者身份识别
-* 情感分析
-* 年龄、性别的识别
-* 文档主题识别
-* 语言类别识别
+* 垃圾邮件检测 (Spam detection)
+* 作者身份识别 (Authorship attribution)
+* 情感分析 (Sentiment analysis)
+* 年龄、性别的识别 (Age and gender identification)
+* 文档主题识别 (Determing the subject of a document)
+* 语种识别 (Language identification)
 
 对于大部分的电子邮件用户而言，垃圾邮件都是一个不幸的事实。如果一封邮件可以被分类成垃圾邮件，那么它就可以被放置在一个专门的垃圾邮件文件夹中。邮件文本的信息分析的过程中，某些属性可以被用于判定邮件是否是垃圾邮件。这些属性包括了~~拼写错误~~、~~缺乏收件人的恰当格式的电子邮件地址~~，以及~~非标准的URL~~。
 
@@ -25,9 +25,17 @@
 
 情感分析是一种判定文本中态度和观点的技术。影评是一种流行的方式，这种方法也可以应用在几乎所有的产品评价中。这可以帮助生产方更好的评估他们的产品在用户心中是怎样的感受。通常，文本被分类成消极或积极的类别。情感分析也被称为意见抽取(option extraction)、意见挖掘(option mining)和主观分析(subjectivity analysis)。典型的例子如，消费者对于股票市场的信心和交易可以通过微博和其他来源数据预测得到。
 
-![word cloud](img/Foundation-l_word_cloud_without_headers_and_quotes.png)
+识别文档的主题，对于管理大量文档时是有帮助的。搜索引擎是非常关注这类技术的，但也会借鉴如标签云(tag cloud)的方式进行文档的简单归类。
+标签云展现的一组词语，体现了这些词语出现的相对频率大小。
 
-## Understanding sentiment analysis
+下面这幅图就是由[IBM Word Cloud Generator](http://www.softpedia.com/get/Office-tools/Other-Office-Tools/IBM-Word-Cloud-Generator.shtml)
+(<http://www.softpedia.com/get/Office-tools/Other-Office-Tools/IBM-Word-Cloud-Generator.shtml>)工具生成的，这幅图的出处是<https://upload.wikimedia.org/wikipedia/commons/9/9e/Foundation-l_word_cloud_without_headers_and_quotes.png>。
+
+![Word Cloud of Wikipedia](img/Foundation-l_word_cloud_without_headers_and_quotes.png)
+
+一段文字的语种识别也用到了分类技术。大量的NLP问题中，我们都需要针对不同的语言设计不同的模型，因此这种识别技术也是非常重要和常用的。
+
+## 理解情感分析
 
 ![2014-toyota-camry-expert-review](img/2014-toyota-camry-expert-review.png)
 
@@ -499,4 +507,14 @@ Best Language: se
 
 
 ## 本章术语对照表
+
+
+* Spam detection  垃圾邮件检测
+* Authorship attribution 作者身份识别
+* Sentiment Analysis  情感分析
+* Language identification 语种识别
+* option extraction 意见抽取
+* option mining 意见挖掘
+* subjectivity analysis 主观分析
+* tag cloud  标签云
 
