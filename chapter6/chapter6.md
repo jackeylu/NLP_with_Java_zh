@@ -48,7 +48,7 @@
 情感分析可以应用在句子中、从句中，还可以用于整篇文档。情感分析的结果不仅可以是表示积极或负面，还可以是以数值大小的评分，例如1到10之间的区间。More complex attitude types are possible.Further complicating the process, within a single sentence or document, different
 sentiments could be expressed against different topics.
 
-我们怎么知道不同的词语具有怎样的情感类型呢？答案就是通过情感词典(sentiment lexicons)，这个词典包含了不同词语在情感方面的含义。General Inquirer(< http://www.wjh.harvard.edu/~inquirer/>) 就是这样一种开源词典，其中包括了有1915个代表积极的此物，它还包括了一些如痛苦、喜悦、激烈和鼓动等方面的词语。MPQA Subjectivity Cues Lexicon(<http://mpqa.cs.pitt.edu/>)也是一种开源词库。
+我们怎么知道不同的词语具有怎样的情感类型呢？答案就是通过情感词典(sentiment lexicons)，这个词典包含了不同词语在情感方面的含义。General Inquirer(<http://www.wjh.harvard.edu/~inquirer/>) 就是这样一种开源词典，其中包括了有1915个代表积极的此物，它还包括了一些如痛苦、喜悦、激烈和鼓动等方面的词语。MPQA Subjectivity Cues Lexicon(<http://mpqa.cs.pitt.edu/>)也是一种开源词库。
 
 ## Text classifying techniques
 
