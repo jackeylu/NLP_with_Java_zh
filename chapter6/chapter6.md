@@ -37,7 +37,18 @@
 
 ## 理解情感分析
 
+关于情感分析，我们关心的是对于一个特定产品或话题，什么人持有什么样的观点。这可以帮助我们了解一个城市的居民对于某支球队表现的态度，是积极还是负面的情感。有趣的是，人们可能对于球队表现和球队管理团队的态度可能是截然相反的。
+
+针对一种产品，若能够自动分析出人们对于产品不同方面、属性的态度，并以有意义的方式呈现出来，将会是有益的。下面一幅图，举例说明了从凯利蓝皮书(Kelly Blue Book,是美国著名的第三方独立的车友网站)网友调查得到的，关于丰田凯美瑞2014款车型的评价。
+
 ![2014-toyota-camry-expert-review](img/2014-toyota-camry-expert-review.png)
+
+我们可以看到，如车的总体评分(Overall Rating)、价格(Value)，都以条形图和数值的方式展现。而这些信息的获取和计算都可以通过情感分析来自动完成。
+
+情感分析可以应用在句子中、从句中，还可以用于整篇文档。情感分析的结果不仅可以是表示积极或负面，还可以是以数值大小的评分，例如1到10之间的区间。More complex attitude types are possible.Further complicating the process, within a single sentence or document, different
+sentiments could be expressed against different topics.
+
+我们怎么知道不同的词语具有怎样的情感类型呢？答案就是通过情感词典(sentiment lexicons)，这个词典包含了不同词语在情感方面的含义。General Inquirer(< http://www.wjh.harvard.edu/~inquirer/>) 就是这样一种开源词典，其中包括了有1915个代表积极的此物，它还包括了一些如痛苦、喜悦、激烈和鼓动等方面的词语。MPQA Subjectivity Cues Lexicon(<http://mpqa.cs.pitt.edu/>)也是一种开源词库。
 
 ## Text classifying techniques
 
@@ -517,4 +528,4 @@ Best Language: se
 * option mining 意见挖掘
 * subjectivity analysis 主观分析
 * tag cloud  标签云
-
+* sentiment lexicons 情感词典
