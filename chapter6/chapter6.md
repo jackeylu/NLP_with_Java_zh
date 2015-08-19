@@ -92,6 +92,8 @@ sentiments could be expressed against different topics.
 
 #### Training an OpenNLP classification model
 
+示例代码中用到的模型，可以从OpenNLP的网站(<http://opennlp.sourceforge.net/models-1.5/>)上获得。
+
 代码可能是有错误
 
 ```Java

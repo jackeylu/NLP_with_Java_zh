@@ -13,7 +13,7 @@ public class SentenceTest {
 		String paragraph = "Hi. How are you? This is Mike.";
 
 		// always start with a model, a model is learned from training data
-		InputStream is = new FileInputStream("en-sent.bin");
+		InputStream is = new FileInputStream("src/resource/en-sent.bin");
 		SentenceModel model = new SentenceModel(is);
 		SentenceDetectorME sdetector = new SentenceDetectorME(model);
 
