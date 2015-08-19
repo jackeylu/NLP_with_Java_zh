@@ -90,7 +90,51 @@ sentiments could be expressed against different topics.
 * 展示如何使用训练得到的模型进行分类
 
 
-#### Training an OpenNLP classification model
+#### 训练一个OpenNLP的分类模型(Training an OpenNLP classification model)
+
+因为OpenNLP中没有内置模型，我们需要为分类任务训练一个自己的模型。
+这个过程包括，创建一个包含训练数据集的文件，然后用`DocumentCategorizerME`进行模型训练。训练得到的模型通常是以文件形式保存，以便后续使用。
+
+训练数据集文件是由一行行文本构成的，每一行代表了一个训练数据样本。
+样本的第一个单词表示样本所属类别，在类别后面紧跟一个空格，然后是一段文本。
+例如下面是一条关于dog类别的样本：
+
+``` dog The most interesting feature of a dog is its ... ```
+
+为了演示训练过程，我们创建了一个名为`en-animals.train`的文件，里面包括了两种类别：
+cat和dog。具体的训练样本，我们使用的是来自Wikipedia的内容。
+dog样本使用的是(<https://en.wikipedia.org/wiki/Dog#As_pets>)中狗作为宠物的章节。
+cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)作为宠物章节和驯化品种首段内容。我们去掉了文献中的引用标记。
+
+训练数据集文件的每一行的前面若干内容如下：
+
+```
+    dog The most widespread form of interspecies bonding occurs ...
+    dog There have been two major trends in the changing status of ...
+    dog There are a vast range of commodity forms available to ...
+    dog An Australian Cattle Dog in reindeer antlers sits on Santa's lap
+    ...
+    dog A pet dog taking part in Christmas traditions ...
+    dog The majority of contemporary people with dogs describe their ...
+    dog Another study of dogs' roles in families showed many dogs have
+    ...
+    dog According to statistics published by the American Pet Products
+    ...
+    dog The latest study using Magnetic resonance imaging (MRI) ...
+    cat Cats are common pets in Europe and North America, and their ...
+    cat Although cat ownership has commonly been associated ...
+    cat The concept of a cat breed appeared in Britain during ...
+    cat Cats come in a variety of colors and patterns. These are physical
+    ...
+    cat A natural behavior in cats is to hook their front claws
+    periodically ...
+    cat Although scratching can serve cats to keep their claws from
+    growing ...
+```
+
+在构建训练数据集时，应当保证有足够多的样本。我们这里用到的数据集规模对于一些分析是不够的。但是，后面可以看到，对于正确分类是已经足够了。
+
+
 
 示例代码中用到的模型，可以从OpenNLP的网站(<http://opennlp.sourceforge.net/models-1.5/>)上获得。
 
