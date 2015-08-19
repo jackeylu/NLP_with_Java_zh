@@ -50,11 +50,45 @@ sentiments could be expressed against different topics.
 
 我们怎么知道不同的词语具有怎样的情感类型呢？答案就是通过情感词典(sentiment lexicons)，这个词典包含了不同词语在情感方面的含义。General Inquirer(<http://www.wjh.harvard.edu/~inquirer/>) 就是这样一种开源词典，其中包括了有1915个代表积极的此物，它还包括了一些如痛苦、喜悦、激烈和鼓动等方面的词语。MPQA Subjectivity Cues Lexicon(<http://mpqa.cs.pitt.edu/>)也是一种开源词库。
 
-## Text classifying techniques
+有时候我们可能希望建立一个词典，这通常可以通过半监督学习的方式，借鉴少量标记的样本或规则来引导整个词典的建立。
+当我们面临的问题没有很适合的词典时，这种方法是特别有用的。
 
-## Using APIs to classify text
+我们不仅仅关注情感是积极的还是负面的，我们对于确定情感的属性（有时候称为情感目标）同样感兴趣。参考下面的例子：
 
-### Using OpenNLP
+>"The ride was very rough but the attendants did an excellent job of making us comfortable."
+虽然我们乘坐的交通工具非常简陋，但是上面的服务员提供的超乎想像的服务令我们感到非常舒适。
+
+这句话包含了两种感受：简陋和舒适。前者是负面的，后者是正面的。这些情感或感受的属性或称为目标，分别来自于交通工具和服务。
+
+## 文本分类技术
+
+分类关心给定的一份文档是否与一组不同的文档相匹配。分类文本有两种方式：
+> Classification is concerned with taking a specific document and determining if it fits into one of several other document groups. 
+
+* 基于规则(Rule-based)的分类
+* 基于有监督机器学习(Supervised Machine Learning, SML)的分类
+
+第一种方法使用的规则由词语和多种属性组合而成，这些规则是由领域专家精心构建的。这种方式的分类效果非常有效，
+但是创建一组合适的规则是非常消耗时间的。
+
+有监督机器学习使用一组有主街道文档作为训练集，来创建出用于分类的模型。这些模型我们称为分类器(Classifier)。目前有非常多的不同的机器学习算法，
+如朴素贝叶斯(Naive Bayes)、支持向量机(Support-Vector Machine, SVM)和K近邻(K-nearest neighbor)等。
+
+已经有数不清的文献资料论述了这些算法和技术，我们在此就不讨论这些算法的工作原理了，有兴趣的读者可以自行查阅相关资料。
+
+## 文本分类API使用实战( Using APIs to classify text)
+
+我们选用了 OpenNLP、Stanford API 和LingPipe三种文本分类库来演示。因为 LingPipe 提供了一些不同的分类方法，
+我们将会在其中话费多一些篇幅。
+
+### 使用 OpenNLP (Using OpenNLP)
+
+对于OpenNLP，我们主要是使用```DocumentCategorizer```这一接口完成分类工作。这个接口实现了```DocumentCategorizerME```
+这个类是通过最大熵来实现将文本分类到预定义的类别中。我们将：
+
+* 演示如何训练分类器模型
+* 展示如何使用训练得到的模型进行分类
+
 
 #### Training an OpenNLP classification model
 
@@ -529,3 +563,4 @@ Best Language: se
 * subjectivity analysis 主观分析
 * tag cloud  标签云
 * sentiment lexicons 情感词典
+* Classifier 分类器
