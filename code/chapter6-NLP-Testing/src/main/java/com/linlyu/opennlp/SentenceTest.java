@@ -2,12 +2,14 @@ package com.linlyu.opennlp;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import opennlp.tools.doccat.DoccatFactory;
 import opennlp.tools.doccat.DoccatModel;
+import opennlp.tools.doccat.DocumentCategorizerEventStream;
 import opennlp.tools.doccat.DocumentCategorizerME;
 import opennlp.tools.doccat.DocumentSample;
 import opennlp.tools.doccat.DocumentSampleStream;
@@ -48,5 +50,21 @@ public class SentenceTest {
 		model = DocumentCategorizerME.train("en", sampleStream,param,factory);
 
 		model.serialize(new FileOutputStream(file_model));
+	}
+	
+	public static void classify(String modelFile, String inputText) throws InvalidFormatException, IOException {
+		InputStream modelIn = new FileInputStream(modelFile);
+		DoccatModel model = new DoccatModel(modelIn);
+		DocumentCategorizerME categorizer = new DocumentCategorizerME(model);
+		
+		double[] outcomes = categorizer.categorize(inputText);
+		
+		for (int i = 0; i < categorizer.getNumberOfCategories(); i++)
+		{
+			System.out.println(categorizer.getCategory(i) + " - " + outcomes[i]);
+		}
+		
+		System.out.println(categorizer.getBestCategory(outcomes));
+		System.out.println(categorizer.getAllResults(outcomes));
 	}
 }
