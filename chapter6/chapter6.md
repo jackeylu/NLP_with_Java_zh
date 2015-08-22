@@ -106,7 +106,7 @@ cat和dog。具体的训练样本，我们使用的是来自Wikipedia的内容�
 dog样本使用的是(<https://en.wikipedia.org/wiki/Dog#As_pets>)中狗作为宠物的章节。
 cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)作为宠物章节和驯化品种首段内容。我们去掉了文献中的引用标记。
 
-训练数据集文件的每一行的前面若干内容如下：
+训练数据集文件的每一行的如下（译者注：限于篇幅，仅列出每个样本的前面少量内容）：
 
 ```
     dog The most widespread form of interspecies bonding occurs ...
@@ -126,61 +126,45 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
     cat Although scratching can serve cats to keep their claws from growing ...
 ```
 
-在构建训练数据集时，应当保证有足够多的样本。我们这里用到的数据集规模对于一些分析是不够的。但是，后面可以看到，对于正确分类是已经足够了。
+在构建训练数据集时，应当保证有足够多的样本。我们这里用到的数据集规模对于一些分析是不够的。
+但是，后面可以看到，对于正确分类dog和cat是已经足够了。
 
 `DoccatModel`这个类用于程序化表达训练得到的文本分类模型。模型可以通过`train`方法将标注文本加以训练得到。 
 训练是还需要提供一个字符串标记文本的语种，用`ObjectStream<DocumentSample>`来实现序列读训练数据。 
 `DocumentSample`则代码了一条文本样本，包括了样本的类别标记信息和数据信息(文本句子)。
 
-In the following example, the  en-animal.train file is used to train the model.
-Its input stream is used to create a  PlainTextByLineStream instance, which is
-then converted to an  ObjectStream<DocumentSample> instance. The  train
-method is then applied. The code is enclosed in a try-with-resources block to handle
-exceptions. We also created an output stream that we will use to persist the model:
+在下面的例子中，前面准备得到的`en-animal.train`文件将用于训练得到我们的分类器模型。
+训练数据集文件是由普通文本内容构成，所以这里我们使用`PlainTextByLineStream`来解析
+输入的样本，并转换成特定的样本对象数据流`ObjectStream<DocumentSample>`，然后调用
+`DocumentCategorizerME`的`train`方法来生成模型。我们最后使用一个输出流将模型持久化
+存储到本地磁盘上，以便后续重复使用。
 
-示例代码中用到的模型，可以从OpenNLP的网站(<http://opennlp.sourceforge.net/models-1.5/>)上获得。
-
-代码可能是有错误
+(** 原文的代码是有错误的，try-with-resources block是不符合java语法的，
+为了避免更多的误解和解释，我用正确语法重写如下**)
 
 ```Java
-    DoccatModel model = null;
-    try (InputStream dataIn =
-        new FileInputStream("en-animal.train");
-    OutputStream dataOut =
-        new FileOutputStream("en-animal.model");) {
-    ObjectStream<String> lineStream
-            = new PlainTextByLineStream(dataIn, "UTF-8");
-    ObjectStream<DocumentSample> sampleStream =
-            new DocumentSampleStream(lineStream);
-    model = DocumentCategorizerME.train("en", sampleStream);
-    ...
-    } catch (IOException e) {
-        // Handle exceptions
-    }
-```
-
-我个人认为正确的应该是
-```Java
-    DoccatModel model = null;
-    try {
-        InputStream dataIn =
-            new FileInputStream("en-animal.train");
-        OutputStream dataOut =
-            new FileOutputStream("en-animal.model");
-        ObjectStream<String> lineStream
-            = new PlainTextByLineStream(dataIn, "UTF-8");
+    public static void  train() throws IOException {
+        DoccatModel model = null;
+        ObjectStream<String> lineStream =
+                new PlainTextByLineStream(new MarkableFileInputStreamFactory(
+                        new File("en-animal.train")), "UTF-8");
         ObjectStream<DocumentSample> sampleStream =
-            new DocumentSampleStream(lineStream);
-        model = DocumentCategorizerME.train("en", sampleStream);
-        ...
-    } catch (IOException e) {
-        // Handle exceptions
+                new DocumentSampleStream(lineStream);
+
+        TrainingParameters param = TrainingParameters.defaultParams();
+        DoccatFactory factory = new DoccatFactory();
+        model = DocumentCategorizerME.train("en", sampleStream,param,factory);
+
+        model.serialize(new FileOutputStream("en-animal.model"));
     }
 ```
 
 ![output-for-OpenNLP](img/output-for-OpenNLP.png)
 
-#### Using DocumentCategorizerME to classify text
+模型最后通过`serialize`方法保存到本地磁盘上。
+
+####应用`DocumentCategorizerME`进行文本分类
+
 
 ```Java
     try (InputStream modelIn =
