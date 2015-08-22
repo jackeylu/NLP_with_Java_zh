@@ -2,3 +2,7 @@
 .settings
 *.pdf
 *.class
+*.docx
+*.doc
+code/*/target/
+code/*/*.model
