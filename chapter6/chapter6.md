@@ -165,16 +165,12 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
 
 ####应用`DocumentCategorizerME`进行文本分类
 
+模型建立后，我们就可以用`DocumentCategorizerME`这个类进行文本分类。
+首先读入模型，然后创建一个`DocumentCategorizerME`类的实例，这个实例是个分类器。
+然后可以调用分类器的`categorize`方法来计算获得验证文本属于每种类型的可能性大小。
 
-```Java
-    try (InputStream modelIn =
-        new FileInputStream(new File("en-animal.model"));) {
-        ...
-    } catch (IOException ex) {
-        // Handle exceptions
-    }
-```
-
+由于我们是从文件中读取模型，所以相关的`IOException`需要处理一下，
+读入模型的代码大致如下：
 ```Java
     try {
         InputStream modelIn =
@@ -184,13 +180,20 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
         // Handle exceptions
     }
 ```
+通过输入流，我们创建一个`DoccatModel`模型实例，并用这个模型实例来创建一个`DocumentCategorizerME`的分类器，过程如下：
 
 ```Java
     DoccatModel model = new DoccatModel(modelIn);
     DocumentCategorizerME categorizer =
         new DocumentCategorizerME(model);
 ```
+分类器的`categorize`方法将输入文本进行分类，并返回一个浮点数数组。
+数组中的每一个浮点数代表了输入文本属于某一具体类别的可能性。
+`DocumentCategorizerME`的`getNumberOfCategories`方法返回模型中的类别数量。
+`getCategory`方法则返回输入index对应的类别名称。
 
+下面的代码展示了如何获得输入文本在各种类别上的可能性，并展示了如何输出类别和
+可能性的对应关系。
 ```Java
     double[] outcomes = categorizer.categorize(inputText);
     for (int i = 0; i < categorizer.getNumberOfCategories(); i++) {
@@ -199,6 +202,10 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
     }
 ```
 
+为了演示分类效果，
+我们选取了Wikipedia上的关于通话故事《绿野仙踪》中桃乐茜的小狗Toto
+ ( <http://en.wikipedia.org/wiki/Toto_%28Oz%29>) 的部分章节
+作为测试样本，这里选取的文章的`The classic books`章节的第一句。
 ```Java
     String toto = "Toto belongs to Dorothy Gale, the heroine of "
         + "the first and many subsequent books. In the first "
@@ -208,6 +215,8 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
         + "similar lands, but Toto remained speechless.";
 ```
 
+关于猫的样本，我们选用了Wikipedia中描述玳瑁斑纹的章节(< http://en.wikipedia.org/wiki/Cats_and_humans>):
+
 ```Java
     String calico = "This cat is also known as a calimanco cat or "
         + "clouded tiger cat, and by the abbreviation 'tortie'. "
@@ -215,11 +224,30 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
         + "over with red (or its dilute form, cream) and black "
         + "(or its dilute blue) mottled throughout the coat.";
 ```
+用`Toto`作为测试样本，我们获得如下输出，输出表明输入文本描述的应该是属于狗这一类：
+```
+dog - 0.5870711529777994
+cat - 0.41292884702220056
+```
+而`calico`的分类结果是
+```
+dog - 0.28960436044424276
+cat - 0.7103956395557574
+```
 
+我们可以用`getBestCategory`方法直接获得最匹配的那一个分类，其输入是`outcomes`
+数组。而`getAllResults`则会返回每种类别极其对应的可能性。
+示例代码如下：
 ```Java
     System.out.println(categorizer.getBestCategory(outcomes));
     System.out.println(categorizer.getAllResults(outcomes));
 ```
+关于`calico`的输出则是：
+```
+cat
+dog[0.2896] cat[0.7104]
+```
+
 ### Using Stanford API
 
 #### Using the ColumnDataClassifier class for classification
