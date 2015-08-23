@@ -253,12 +253,17 @@ dog[0.2896] cat[0.7104]
 斯坦福API提供了若干种分类器。
 我们将分别试用`ColumnDataClassifier`类和`StanfordCoreNLP`管线(pipeline)
 进行文本分类和情感分析。斯坦福API提供的分类器有时会比较难使用。在这里，
-我们将以分类箱子大小(classify the size of boxes)为例来展示如何使用`ColumnDataClassifier`。 
+我们将以归类箱子大小为例来展示如何使用`ColumnDataClassifier`。 
 对于管线，我们将示例如何对短语进行正向或负向情感的判定。
 该工具可以从链接<http://nlp.stanford.edu/software/classifier.shtml>上下载得到。
 
 #### 使用`ColumnDataClassifier`类进行分类(Using the ColumnDataClassifier class for classification)
 
+`ColumnDataClassifier`分类器面对的每一条样本都可以是由多个数值构成的。在本章示例中，
+我们将用一个训练集文件来创建一个分类器。然后用一个测试集文件来验证分类器的性能。
+`ColumnDataClassifier`类是通过一个属性文件来控制创建过程的。
+
+这里我们创建的分类器将通过输入的箱子三维属性值来归类。总共有三种类别，分别是：小、中、大。
 
 ```Java
     ColumnDataClassifier cdc =
