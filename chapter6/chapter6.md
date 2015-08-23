@@ -79,7 +79,7 @@ sentiments could be expressed against different topics.
 ## 文本分类API使用实战( Using APIs to classify text)
 
 我们选用了 OpenNLP、Stanford API 和LingPipe三种文本分类库来演示。因为 LingPipe 提供了一些不同的分类方法，
-我们将会在其中话费多一些篇幅。
+我们将会在其中花费多一些篇幅。
 
 ### 使用 OpenNLP (Using OpenNLP)
 
@@ -248,9 +248,17 @@ cat
 dog[0.2896] cat[0.7104]
 ```
 
-### Using Stanford API
+### 使用斯坦福API(Using Stanford API)
 
-#### Using the ColumnDataClassifier class for classification
+斯坦福API提供了若干种分类器。
+我们将分别试用`ColumnDataClassifier`类和`StanfordCoreNLP`管线(pipeline)
+进行文本分类和情感分析。斯坦福API提供的分类器有时会比较难使用。在这里，
+我们将以分类箱子大小(classify the size of boxes)为例来展示如何使用`ColumnDataClassifier`。 
+对于管线，我们将示例如何对短语进行正向或负向情感的判定。
+该工具可以从链接<http://nlp.stanford.edu/software/classifier.shtml>上下载得到。
+
+#### 使用`ColumnDataClassifier`类进行分类(Using the ColumnDataClassifier class for classification)
+
 
 ```Java
     ColumnDataClassifier cdc =
