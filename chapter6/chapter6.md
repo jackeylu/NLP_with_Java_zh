@@ -295,7 +295,9 @@ dog[0.2896] cat[0.7104]
 ```
 
 创建分类器的代码示例如下。用属性文件作为构造函数的参数来创建
-一个`ColumnDataClassifier`分类器的实例。
+一个`ColumnDataClassifier`分类器的实例。然后调用`makeClassifier`方法
+来返回一个`Classifier`接口实例。这个接口支持三种方法，这里将会展示其中的两种。
+`readTrainingExamples`方法则是实现从训练数据集文件中读取训练数据样本。
 
 ```Java
     ColumnDataClassifier cdc =
@@ -304,12 +306,17 @@ dog[0.2896] cat[0.7104]
         cdc.makeClassifier(cdc.readTrainingExamples("box.train"));
 ```
 
+编译执行后，将会得到如下输出。输出包括了多种信息，第一部分
+是重复输出属性文件内容，可用于校验属性文件是否正确。
+
 ```Ouput
 3.realValued = true
 testFile = .box.test
 ...
 trainFile = .box.train
 ```
+
+紧接着是读取的数据集的各类特征信息：
 
 ```
 Reading dataset from box.train ... done [0.1s, 60 items].
@@ -321,6 +328,8 @@ EVALSCORE The last available eval score
 Iter ## evals ## <SCALING> [LINESEARCH] VALUE TIME |GNORM| {RELNORM}
 AVEIMPROVE EVALSCORE
 ```
+
+接着就是利用样本数据迭代计算得到分类器的过程：
 
 ```
 Iter 1 evals 1 <D> [113M 3.107E-4] 5.985E1 0.00s |3.829E1| {1.959E-1}
@@ -338,6 +347,10 @@ previous_val | / |newestVal| < TOL
 Total time spent in optimization: 0.07s
 ```
 
+此时此刻，分类器则就绪待用了。接着则用测试数据文件来验证分类器。
+这里是用`ObjectBank`的`getLineIterator`方法来获得测试数据文件的每一行样本。
+其中完成了数据转换。这个循环处理过程如下：
+
 ```Java
     for (String line :
         ObjectBank.getLineIterator("box.test", "utf-8")) {
@@ -345,13 +358,17 @@ Total time spent in optimization: 0.07s
     }
 ```
 
+在`for-each`内部，通过`makeDatumFromLine`方法将一行输入转换成一个`Datum`实例。
+然后用分类器的`classOf`方法来获得输入样本的预测结果类型。
+
 ```Java
     Datum<String, String> datum = cdc.makeDatumFromLine(line);
     System.out.println("Datum: {"
         + line + "]\tPredicted Category: "
         + classifier.classOf(datum));
 ```
-
+上面的代码运行后，测试数据的每一行都会被处理，并打印出预测的结果。
+这里摘录了头两行和最后两行结果作为示意。
 ```
 Datum: {small 1.33 3.50 5.43] Predicted Category: medium
 Datum: {small 1.18 1.73 3.14] Predicted Category: small
@@ -360,13 +377,17 @@ Datum: {large 6.01 9.35 16.64] Predicted Category: large
 Datum: {large 6.76 9.66 15.44] Predicted Category: large
 ```
 
+我们也可以单独对一个具体输入做分类，需要调用的是`makeDatumFromStrings`
+方法来创建`Datum`实例，后续则是一样的流程。在下面的代码中，我们构建了一个
+string数组来描述一个样本，第一个字符串表示的样本的类别，这里是待预测的结果，所以可以置为空串，后续的三个字符串则与前面叙述的箱子三维信息一致。
+
 ```Java
     String sample[] = {"", "6.90", "9.8", "15.69"};
     Datum<String, String> datum =
         cdc.makeDatumFromStrings(sample);
     System.out.println("Category: " + classifier.classOf(datum));
 ```
-
+这个代码的输出是箱子的预测类别：
 ```
 Category: large
 ```
