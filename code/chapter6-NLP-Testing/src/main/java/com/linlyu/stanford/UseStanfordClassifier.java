@@ -47,23 +47,19 @@ public class UseStanfordClassifier {
 	}
 	
 	
-	public static void usingStanfordSentimentAnalysis() {
-        String review = "An overly sentimental film with a somewhat "
-                + "problematic message, but its sweetness and charm "
-                + "are occasionally enough to approximate true depth "
-                + "and grace. ";
-
-        String sam = "Sam was an odd sort of fellow. Not prone to angry and "
-                + "not prone to merriment. Overall, an odd fellow.";
-        String mary = "Mary thought that custard pie was the best pie in the "
-                + "world. However, she loathed chocolate pie.";
+	public static void usingStanfordSentimentAnalysis() {        
         Properties props = new Properties();
         props.put("annotators", "tokenize, ssplit, parse, sentiment");
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
+        String review = "An overly sentimental film with a somewhat "
+                + "problematic message, but its sweetness and charm "
+                + "are occasionally enough to approximate true depth "
+                + "and grace. ";
+        
         Annotation annotation = new Annotation(review);
-        pipeline.annotate(annotation);
-
+        pipeline.annotate(annotation);       
+        
         System.out.println("---sentimentText");
         String[] sentimentText = {"Very Negative", "Negative", "Neutral",
             "Positive", "Very Positive"};
@@ -74,9 +70,17 @@ public class UseStanfordClassifier {
             tree.printLocalTree();
             int score = RNNCoreAnnotations.getPredictedClass(tree);
             System.out.println(sentimentText[score]);
-        }
-
-        // Classifer
+        }        
+        
+        String sam = "Sam was an odd sort of fellow. Not prone to angry and "
+                + "not prone to merriment. Overall, an odd fellow.";
+        String mary = "Mary thought that custard pie was the best pie in the "
+                + "world. However, she loathed chocolate pie.";
+        
+    }    
+	
+	public static void CRF() {
+		// Classifer
         CRFClassifier<CoreMap> crf
                 = CRFClassifier.getClassifierNoExceptions(
                         "C:/Current Books in Progress/NLP and Java/Models"
@@ -91,5 +95,5 @@ public class UseStanfordClassifier {
         for (int i = 0; i < classification.length; i++) {
             System.out.println(classification[i]);
         }
-    }    
+	}
 }

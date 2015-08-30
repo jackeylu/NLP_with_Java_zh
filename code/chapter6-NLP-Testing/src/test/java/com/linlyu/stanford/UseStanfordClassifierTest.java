@@ -15,7 +15,7 @@ public class UseStanfordClassifierTest {
 
 	@Test
 	public void testUsingStanfordSentimentAnalysis() {
-		fail("Not yet implemented");
+		UseStanfordClassifier.usingStanfordSentimentAnalysis();
 	}
 
 }
