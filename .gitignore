@@ -6,3 +6,5 @@
 *.doc
 code/*/target/
 code/*/*.model
+*.sublime-project
+*.sublime-workspace
