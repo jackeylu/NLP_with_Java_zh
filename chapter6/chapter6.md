@@ -379,7 +379,8 @@ Datum: {large 6.76 9.66 15.44] Predicted Category: large
 
 我们也可以单独对一个具体输入做分类，需要调用的是`makeDatumFromStrings`
 方法来创建`Datum`实例，后续则是一样的流程。在下面的代码中，我们构建了一个
-string数组来描述一个样本，第一个字符串表示的样本的类别，这里是待预测的结果，所以可以置为空串，后续的三个字符串则与前面叙述的箱子三维信息一致。
+string数组来描述一个样本，第一个字符串表示的样本的类别，
+这里是待预测的结果，所以可以置为空串，后续的三个字符串则与前面叙述的箱子三维信息一致。
 
 ```Java
     String sample[] = {"", "6.90", "9.8", "15.69"};
@@ -392,7 +393,11 @@ string数组来描述一个样本，第一个字符串表示的样本的类别�
 Category: large
 ```
 
-#### Using the Stanford pipeline to perform sentiment analysis
+#### 利用斯坦福管线进行情感分析(Using the Stanford pipeline to perform sentiment analysis)
+
+本节描述如何使用斯坦福API进行情感分析。API中的`StanfordCoreNLP`库提供了管线(`pipeline`)来帮助文本分析。
+
+我们选取了电影《阿甘正传》(Forrest Gump)的三条影评内容进行实验，数据来源是`Rotten Tomatoes`(< http://www.rottentomatoes.com/m/forrest_gump/ >)：
 
 ```Java
     String review = "An overly sentimental film with a somewhat "
@@ -409,11 +414,21 @@ Category: large
         + "chocolate pie.";
 ```
 
+
+To perform this analysis, we need to use a sentiment  annotator as shown here.
+This also requires the use of the  tokenize ,  ssplit and  parse annotators. The
+parse annotator provides more structural information about the text, which will
+be discussed in more detail in Chapter 7, Using a Parser to Extract Relationships:
+
 ```Java
     Properties props = new Properties();
     props.put("annotators", "tokenize, ssplit, parse, sentiment");
     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 ```
+
+The text is used to create an  Annotation instance, which is then used as the
+argument to the  annotate method that performs the actual work, as shown here:
+
 
 ```Java
     Annotation annotation = new Annotation(review);
@@ -440,10 +455,28 @@ Category: large
 
 ### Using LingPipe to classify text
 
+We will use LingPipe to demonstrate a number of classification tasks including
+general text classification using trained models, sentiment analysis, and language
+identification. We will cover the following classification topics:
+•  Training text using the  Classified class
+•  Training models using other training categories
+•  How to classify text using LingPipe
+•  Performing sentiment analysis using LingPipe
+•  Identifying the language used
+Several of the tasks described in this section will use the following declarations.
+LingPipe comes with training data for several categories. The  categories array
+contains the names of the categories packaged with LingPipe:
+
+
 ```Java
     String[] categories = {"soc.religion.christian",
         "talk.religion.misc","alt.atheism","misc.forsale"};
 ```
+The  DynamicLMClassifier class is used to perform the actual classification.
+It is created using the  categories array giving it the names of the categories to use.
+The  nGramSize value specifies the number of contiguous items in a sequence used in
+the model for classification purposes:
+
 
 ```Java
     int nGramSize = 6;
@@ -454,11 +487,34 @@ Category: large
 
 #### Training text using the Classified class
 
+General text classification using LingPipe involves training the  DynamicLMClassifier
+class using training files and then using the class to perform the actual classification.
+LingPipe comes with several training datasets as found in the LingPipe directory,
+demos/data/fourNewsGroups/4news-train . We will use these to illustrate the
+training process. This example is a simplified version of the process found at
+http://alias-i.com/lingpipe/demos/tutorial/classify/read-me.html .
+
+We start by declaring the training directory:
 ```Java
     String directory = ".../demos";
     File trainingDirectory = new File(directory
         + "/data/fourNewsGroups/4news-train");
 ```
+
+In the training directory, there are four subdirectories whose names are listed in
+the  categories array. In each subdirectory is a series of files with numeric names.
+These files contain newsgroups ( http://qwone.com/~jason/20Newsgroups/ ) data
+that deal with that directories, names.
+
+The process of training the model involves using each file and category with the
+DynamicLMClassifier class'  handle method. The method will use the file to create
+a training instance for the category and then augment the model with this instance.
+The process uses nested for-loops.
+
+The outer for-loop creates a  File object using the directory's name and then
+applies the  list method against it. The  list method returns a list of the files in
+the directory. The names of these files are stored in the  trainingFiles array,
+which will be used in the inner loop:
 
 ```Java
     for (int i = 0; i < categories.length; ++i) {
@@ -468,6 +524,11 @@ Category: large
         // Inner for-loop
     }
 ```
+
+The inner for-loop, as shown next, will open each file and read the text from the file.
+The  Classification class represents a classification with a specified category. It is
+used with the text to create a  Classified instance. The  DynamicLMClassifier class'
+handle method updates the model with the new information:
 
 ```Java
     for (int j = 0; j < trainingFiles.length; ++j) {
@@ -485,6 +546,15 @@ Category: large
     }
 ```
 
+Notice：You can alternately use the com.aliasi.util.Files class
+instead in java.io.File, otherwise the readFromFile
+method will not be available.
+
+The classifier can be serialized for later use as shown here. The
+AbstractExternalizable class is a utility class that supports the serialization of
+objects. It has a static  compileTo method that accepts a  Compilable instance and a
+File object. It writes the object to the file, as follows:
+
 ```Java
     try {
         AbstractExternalizable.compileTo( (Compilable) classifier,
@@ -494,8 +564,16 @@ Category: large
     }
 ```
 
+The loading of the classifier will be illustrated in the Classifying text using LingPipe
+section later in this chapter.
 
 #### Using other training categories
+
+Other newsgroups data can be found at  http://qwone.com/~jason/20Newsgroups/ .
+These collections of data can be used to train other models as listed in the following
+table. Although there are only 20 categories, they can be useful training models.
+Three different downloads are available where some have been sorted and in others,
+duplicate data has been removed:
 
 
 +---------------------------+-----------------------+
@@ -524,8 +602,15 @@ Category: large
 
 
 
-
 #### Classifying text using LingPipe
+
+To classify text, we will use the  DynamicLMClassifier class'  classify method.
+We will demonstrate its use with two different text sequences:
+•  forSale : The first is from  http://www.homes.com/for-sale/ where we use
+the first complete sentence
+•  martinLuther : The second is from  http://en.wikipedia.org/wiki/
+Martin_Luther where we use the first sentence of the second paragraph
+These strings are declared here:
 
 ```Java
     String forSale =
@@ -544,6 +629,11 @@ Category: large
         + "grace through faith in Jesus Christ as redeemer "
         + "from sin and subsequently eternity in Hell.";
 ```
+To reuse the classifier serialized in the previous section, use the
+AbstractExternalizable class'  readObject method as shown here. We will use the
+LMClassifier class instead of the  DynamicLMClassifier class. They both support the
+classify method but the  DynamicLMClassifier class is not readily serializable:
+
 
 ```Java
     LMClassifier classifier = null;
@@ -556,6 +646,10 @@ Category: large
     }
 ```
 
+In the next code sequence, we apply the  LMClassifier class'  classify method.
+This returns a  JointClassification instance, which we use to determine the
+best match:
+
 ```Java
     JointClassification classification =
     classifier.classify(text);
@@ -563,6 +657,8 @@ Category: large
     String bestCategory = classification.bestCategory();
     System.out.println("Best Category: " + bestCategory);
 ```
+
+For the  forSale text, we get the following output:
 
 ```
 Text: Finding a home for sale has never been easier. With Homes.com,
@@ -572,6 +668,7 @@ directory to work with a professional Realtor and find your perfect home.
 Best Category: misc.forsale
 ```
 
+For the  martinLuther text, we get the following output:
 ```
 Text: Luther taught that salvation and subsequently eternity in heaven
 is not earned by good deeds but is received only as a free gift of God's
@@ -580,8 +677,30 @@ eternity in Hell.
 Best Category: soc.religion.christian
 ```
 
+They both correctly classified the text.
 
 #### Sentiment analysis using LingPipe
+
+Sentiment analysis is performed in a very similar manner to that of general text
+classification. One difference is the use of only two categories: positive and negative.
+
+We need to use data files to train our model. We will use a simplified version of
+the sentiment analysis performed at  http://alias-i.com/lingpipe/demos/
+tutorial/sentiment/read-me.html using sentiment data found developed
+for movies ( http://www.cs.cornell.edu/people/pabo/movie-review-data/
+review_polarity.tar.gz ). This data was developed from 1,000 positive and 1,000
+negative reviews of movies found in IMDb's movie archives.
+
+These reviews need to be downloaded and extracted. A  txt_sentoken directory
+will be extracted along with its two subdirectories:  neg and  pos . Both of these
+subdirectories contain movie reviews. Although some of these files can be held
+in reserve to evaluate the model created, we will use all of them to simplify
+the explanation.
+
+We will start with re-initialization of variables declared in the Using LingPipe to
+classify text section. The  categories array is set to a two-element array to hold the
+two categories. The  classifier variable is assigned a new  DynamicLMClassifier
+instance using the new category array and  nGramSize of size 8:
 
 ```Java
     categories = new String[2];
@@ -591,6 +710,11 @@ Best Category: soc.religion.christian
     classifier = DynamicLMClassifier.createNGramProcess(
         categories, nGramSize);
 ```
+
+As we did earlier, we will create a series of instances based on the contents found
+in the training files. We will not detail the following code as it is very similar to that
+found in the Training text using the Classified class section. The main difference is there
+are only two categories to process:
 
 ```Java
     String directory = "...";
@@ -614,6 +738,9 @@ Best Category: soc.religion.christian
     }
 ```
 
+The model is now ready to be used. We will use the review for the movie
+Forrest Gump:
+
 ```Java
     String review = "An overly sentimental film with a somewhat "
         + "problematic message, but its sweetness and charm "
@@ -621,14 +748,34 @@ Best Category: soc.religion.christian
         + "and grace. ";
 ```
 
+We use the  classify method to perform the actual work. It returns a
+Classification instance whose  bestCategory method returns the best category,
+as shown here:
+
 ```Java
     Classification classification = classifier.classify(review);
     String bestCategory = classification.bestCategory();
     System.out.println("Best Category: " + bestCategory);
 ```
+When executed, we get the following output:
+```
+Best Category: pos
+```
+This approach will also work well for other categories of text.
+
 #### Language identification using LingPipe
 
+LingPipe comes with a model,  langid-leipzig.classifier , trained for several
+languages and is found in the  demos/models directory. A list of supported languages
+is found in the following table. This model was developed using training data derived
+from the Leipzig Corpora Collection ( http://corpora.uni-leipzig.de/ ). Another
+good tool can be found at  http://code.google.com/p/language-detection/ 
+
 ![language-detection](img/language-detection.png)
+
+To use this model, we use essentially the same code we used in the Classifying text
+using LingPipe section earlier in this chapter. We start with the same movie review
+of Forrest Gump:
 
 ```Java
     String text = "An overly sentimental film with a somewhat "
@@ -637,6 +784,8 @@ Best Category: soc.religion.christian
         + "and grace. ";
     System.out.println("Text: " + text);
 ```
+
+The  LMClassifier instance is created using the  langid-leipzig.classifier file:
 
 ```Java
     LMClassifier classifier = null;
@@ -649,11 +798,16 @@ Best Category: soc.religion.christian
     }
 ```
 
+The  classify method is used followed by the application of the  bestCategory
+method to obtain the best language fit, as shown here:
+
 ```Java
     Classification classification = classifier.classify(text);
     String bestCategory = classification.bestCategory();
     System.out.println("Best Language: " + bestCategory);
 ```
+
+The output is as follows with English being chosen:
 
 ```
 Text: An overly sentimental film with a somewhat problematic message, but
@@ -662,19 +816,46 @@ and grace.
 Best Language: en
 ```
 
+The following code example uses the first sentence of the Swedish Wikipedia entry
+in Swedish ( http://sv.wikipedia.org/wiki/Svenska ) for the text:
+
 ```Java
     text = "Svenska är ett östnordiskt språk som talas av cirka "
         + "tio miljoner personer[1], främst i Finland "
         + "och Sverige.";
 ```
 
+The output, as shown here, correctly selects the Swedish language:
+
 ```
 Text: Svenska är ett östnordiskt språk som talas av cirka tio miljoner
 personer[1], främst i Finland och Sverige.
 Best Language: se
 ```
+Training can be conducted in the same way as done for the previous LingPipe
+models. Another consideration when performing language identification is that
+the text may be written in multiple languages. This can complicate the language
+detection process.
 
 ## Summary
+
+In this chapter, we discussed the issues surrounding the classification of text and
+examined several approaches to perform this process. The classification of text is
+useful for many activities such as detecting e-mail spamming, determining who
+the author of a document may be, performing gender identification, and language
+identification.
+
+We also demonstrated how sentiment analysis is performed. This analysis is
+concerned with determining whether a piece of text is positive or negative in nature.
+It is also possible to assess other sentiment attributes.
+
+Most of the approaches we used required us to first create a model based on training
+data. Normally, this model needs to be validated using a set of test data. Once the
+model has been created, it is usually easy to use.
+
+In the next chapter, we will investigate the parsing process and how it contributes to
+extracting relationships from text.
+
 
 
 ## 本章术语对照表
