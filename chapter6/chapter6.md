@@ -453,17 +453,17 @@ argument to the  annotate method that performs the actual work, as shown here:
 
 
 
-### Using LingPipe to classify text
+### 用`LingPipe`进行文本分类(Using LingPipe to classify text)
 
-We will use LingPipe to demonstrate a number of classification tasks including
-general text classification using trained models, sentiment analysis, and language
-identification. We will cover the following classification topics:
-•  Training text using the  Classified class
-•  Training models using other training categories
-•  How to classify text using LingPipe
-•  Performing sentiment analysis using LingPipe
-•  Identifying the language used
-Several of the tasks described in this section will use the following declarations.
+本节我们将利用`LingPipe`进行各种分类任务，包括了一般的文本分类，以及情感分析和语种检测。
+ We will cover the following classification topics:
+* Training text using the  Classified class
+* Training models using other training categories
+* How to classify text using LingPipe
+* Performing sentiment analysis using LingPipe
+* Identifying the language used
+
+以上任务中有一部分都用到了下面`categories`的定义。
 LingPipe comes with training data for several categories. The  categories array
 contains the names of the categories packaged with LingPipe:
 
@@ -472,6 +472,7 @@ contains the names of the categories packaged with LingPipe:
     String[] categories = {"soc.religion.christian",
         "talk.religion.misc","alt.atheism","misc.forsale"};
 ```
+
 The  DynamicLMClassifier class is used to perform the actual classification.
 It is created using the  categories array giving it the names of the categories to use.
 The  nGramSize value specifies the number of contiguous items in a sequence used in
@@ -501,8 +502,8 @@ We start by declaring the training directory:
         + "/data/fourNewsGroups/4news-train");
 ```
 
-In the training directory, there are four subdirectories whose names are listed in
-the  categories array. In each subdirectory is a series of files with numeric names.
+在训练文件夹下有四个子文件夹，文件夹的名字是以`categories`数组中的内容命名的。 
+ In each subdirectory is a series of files with numeric names.
 These files contain newsgroups ( http://qwone.com/~jason/20Newsgroups/ ) data
 that deal with that directories, names.
 
