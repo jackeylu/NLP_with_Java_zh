@@ -397,7 +397,8 @@ Category: large
 
 本节描述如何使用斯坦福API进行情感分析。API中的`StanfordCoreNLP`库提供了管线(`pipeline`)来帮助文本分析。
 
-我们选取了电影《阿甘正传》(Forrest Gump)的三条影评内容进行实验，数据来源是`Rotten Tomatoes`(< http://www.rottentomatoes.com/m/forrest_gump/ >)：
+我们选取了电影《阿甘正传》(Forrest Gump)的三条影评内容进行实验，
+数据来源是`Rotten Tomatoes`(< http://www.rottentomatoes.com/m/forrest_gump/ >)：
 
 ```Java
     String review = "An overly sentimental film with a somewhat "

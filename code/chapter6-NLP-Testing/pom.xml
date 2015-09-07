@@ -25,6 +25,13 @@
   		<artifactId>stanford-parser</artifactId>
   		<version>3.5.2</version>
   	</dependency>
+  	<dependency>
+  		<groupId>edu.stanford.nlp</groupId>
+  		<artifactId>stanford-models</artifactId>
+  		<version>3.5.2</version>
+  		<systemPath>D:\Lvlin\NLP\stanford-parser-3.5.2-models.jar</systemPath>
+  		<scope>system</scope>
+  	</dependency>
   </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
