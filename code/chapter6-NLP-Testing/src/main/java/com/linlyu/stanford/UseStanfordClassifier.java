@@ -1,7 +1,9 @@
 package com.linlyu.stanford;
 
+import java.io.File;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.*;
 
 import edu.stanford.nlp.classify.Classifier;
 import edu.stanford.nlp.classify.ColumnDataClassifier;
@@ -24,7 +26,8 @@ public class UseStanfordClassifier {
 		ColumnDataClassifier cdc = new ColumnDataClassifier(prop_file);
 
 		Classifier<String, String> classifier = cdc.makeClassifier(cdc.readTrainingExamples(train_file));
-		for (String line : ObjectBank.getLineIterator(test_file, "utf-8")) {
+		String encoding = "utf-8";
+		for (String line : ObjectBank.getLineIterator(test_file, encoding)) {
 			// instead of the method in the line below, if you have the
 			// individual elements
 			// already you can use cdc.makeDatumFromStrings(String[])
