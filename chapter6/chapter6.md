@@ -137,25 +137,23 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
 训练数据集文件是由普通文本内容构成，所以这里我们使用`PlainTextByLineStream`来解析
 输入的样本，并转换成特定的样本对象数据流`ObjectStream<DocumentSample>`，然后调用
 `DocumentCategorizerME`的`train`方法来生成模型。我们最后使用一个输出流将模型持久化
-存储到本地磁盘上，以便后续重复使用。
-
-(** 原文的代码是有错误的，try-with-resources block是不符合java语法的，
-为了避免更多的误解和解释，我用正确语法重写如下**)
+存储到本地磁盘上，以便后续重复使用。我们用“try-with-resources”的语法将资源声明放在一起，
+以便于处理异常场景下的资源释放问题。
 
 ```Java
-    public static void  train() throws IOException {
-        DoccatModel model = null;
-        ObjectStream<String> lineStream =
-                new PlainTextByLineStream(new MarkableFileInputStreamFactory(
-                        new File("en-animal.train")), "UTF-8");
+    DoccatModel model = null;
+    try (InputStream dataIn =
+            new FileInputStream("en-animal.train");
+        OutputStream dataOut =
+            new FileOutputStream("en-animal.model");) {
+        ObjectStream<String> lineStream
+            = new PlainTextByLineStream(dataIn, "UTF-8");
         ObjectStream<DocumentSample> sampleStream =
-                new DocumentSampleStream(lineStream);
-
-        TrainingParameters param = TrainingParameters.defaultParams();
-        DoccatFactory factory = new DoccatFactory();
-        model = DocumentCategorizerME.train("en", sampleStream,param,factory);
-
-        model.serialize(new FileOutputStream("en-animal.model"));
+            new DocumentSampleStream(lineStream);
+        model = DocumentCategorizerME.train("en", sampleStream);
+            ...
+    } catch (IOException e) {
+        // Handle exceptions
     }
 ```
 
@@ -172,13 +170,12 @@ cat样本选用了(<https://en.wikipedia.org/wiki/Human_interaction_with_cats#>)
 由于我们是从文件中读取模型，所以相关的`IOException`需要处理一下，
 读入模型的代码大致如下：
 ```Java
-    try {
-        InputStream modelIn =
-            new FileInputStream(new File("en-animal.model"));
+    try (InputStream modelIn =
+        new FileInputStream(new File("en-animal.model"));) {
         ...
     } catch (IOException ex) {
         // Handle exceptions
-    }
+    }  
 ```
 通过输入流，我们创建一个`DoccatModel`模型实例，并用这个模型实例来创建一个`DocumentCategorizerME`的分类器，过程如下：
 
