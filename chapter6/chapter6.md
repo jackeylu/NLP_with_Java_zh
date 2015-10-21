@@ -475,28 +475,22 @@ Neutral
 ### 用`LingPipe`进行文本分类(Using LingPipe to classify text)
 
 本节我们将利用`LingPipe`进行各种分类任务，包括了一般的文本分类，以及情绪分析和语种检测。
- We will cover the following classification topics:
-* Training text using the  Classified class
+具体而言，包括以下话题:
+* 利用`Classified`类进行文本训练
 * Training models using other training categories
-* How to classify text using LingPipe
-* Performing sentiment analysis using LingPipe
-* Identifying the language used
+* 如何使用`LingPipe`进行文本分类
+* 如何使用`LingPipe`进行情绪分析
+* 语种识别
 
-以上任务中有一部分都用到了下面`categories`的定义。
-LingPipe comes with training data for several categories. The  categories array
-contains the names of the categories packaged with LingPipe:
-
+本节话题中有一部分都用到了一个类别(`categories`)的概念。在`LingPipe`中，类别包括了：
 
 ```Java
     String[] categories = {"soc.religion.christian",
         "talk.religion.misc","alt.atheism","misc.forsale"};
 ```
 
-The  DynamicLMClassifier class is used to perform the actual classification.
-It is created using the  categories array giving it the names of the categories to use.
-The  nGramSize value specifies the number of contiguous items in a sequence used in
-the model for classification purposes:
-
+`DynamicLMClassifier`类实现了分类功能。该类利用前面提到的`categories`数组和`nGramSize`参数来
+生成分类器。`nGramSize`指的是分类模型中使用序列的连续项目的数量。
 
 ```Java
     int nGramSize = 6;
@@ -505,7 +499,7 @@ the model for classification purposes:
             categories, nGramSize);
 ```
 
-#### Training text using the Classified class
+#### 利用`Classified`类进行文本训练
 
 General text classification using LingPipe involves training the  DynamicLMClassifier
 class using training files and then using the class to perform the actual classification.
