@@ -501,14 +501,13 @@ Neutral
 
 #### 利用`Classified`类进行文本训练
 
-General text classification using LingPipe involves training the  DynamicLMClassifier
-class using training files and then using the class to perform the actual classification.
-LingPipe comes with several training datasets as found in the LingPipe directory,
-demos/data/fourNewsGroups/4news-train . We will use these to illustrate the
-training process. This example is a simplified version of the process found at
-http://alias-i.com/lingpipe/demos/tutorial/classify/read-me.html .
+一般而言，用`LingPipe`进行文本分类包括了利用训练文件训练`DynamicLMClassifier`类实例，
+以及利用训练结果进行实际的分类工作。
+在`LingPipe`自身目录`demos/data/fourNewsGroups/4news-train`中有一些自带的训练数据集。
+我们将用这些数据来示例一个训练过程，
+本文中的示例是官方教程<http://alias-i.com/lingpipe/demos/tutorial/classify/read-me.html>的简化版本。
 
-We start by declaring the training directory:
+我们先申明训练数据集的文件路径：
 ```Java
     String directory = ".../demos";
     File trainingDirectory = new File(directory
@@ -516,19 +515,15 @@ We start by declaring the training directory:
 ```
 
 在训练文件夹下有四个子文件夹，文件夹的名字是以`categories`数组中的内容命名的。 
- In each subdirectory is a series of files with numeric names.
-These files contain newsgroups ( http://qwone.com/~jason/20Newsgroups/ ) data
-that deal with that directories, names.
+ 每个子文件夹内又有一系列以数字命名的文件。
+ 这些数据文件来源是(http://qwone.com/~jason/20Newsgroups/)。
 
-The process of training the model involves using each file and category with the
-DynamicLMClassifier class'  handle method. The method will use the file to create
-a training instance for the category and then augment the model with this instance.
-The process uses nested for-loops.
+训练的过程通过`DynamicLMClassifier`的`handle`方法进行，在此之前需要利用所有训练数据文件
+以及预先标记的类别`category`信息进行训练。该方法学习这类的所有文件语料来获得相应的分类器实例。
 
-The outer for-loop creates a  File object using the directory's name and then
-applies the  list method against it. The  list method returns a list of the files in
-the directory. The names of these files are stored in the  trainingFiles array,
-which will be used in the inner loop:
+以下示例代码中外层的`for`循环中每一次迭代处理一类训练文件，
+首先利用`trainingDirectory和类别`categories[i]`来指明当前训练类别的文件目录`classDir`，
+然后`list`方法列出目录中的所有待训练的文件`trainingFiles`。
 
 ```Java
     for (int i = 0; i < categories.length; ++i) {
@@ -539,10 +534,9 @@ which will be used in the inner loop:
     }
 ```
 
-The inner for-loop, as shown next, will open each file and read the text from the file.
-The  Classification class represents a classification with a specified category. It is
-used with the text to create a  Classified instance. The  DynamicLMClassifier class'
-handle method updates the model with the new information:
+在内层的`for`循环中，我们依次读取每一个训练数据文件，
+为每一个训练文件创建一个`Classification`实例，并利用其文本内容获得一个`Classified`实例，
+最后`DynamicLMClassifier`类的实例`classifier`则通过`handle`方法利用新文本中的信息来更新模型。
 
 ```Java
     for (int j = 0; j < trainingFiles.length; ++j) {
@@ -560,14 +554,14 @@ handle method updates the model with the new information:
     }
 ```
 
-Notice：You can alternately use the com.aliasi.util.Files class
-instead in java.io.File, otherwise the readFromFile
-method will not be available.
+```
+注意：`readFromFile`方法是来自`com.aliasi.util.Files`的，
+而不是`java.io.File`。
+```
 
-The classifier can be serialized for later use as shown here. The
-AbstractExternalizable class is a utility class that supports the serialization of
-objects. It has a static  compileTo method that accepts a  Compilable instance and a
-File object. It writes the object to the file, as follows:
+分类器实例对象可以序列化后留待以后使用。`AbstractExternalizable`是一个序列化工具类，
+提供了一个称为`compileTo`的静态方法，能够将可编辑的实例对象序列化到一个文件对象中。
+这样就能够将我们的分类器模型存储起来，反复使用。示例代码如下:
 
 ```Java
     try {
@@ -578,13 +572,14 @@ File object. It writes the object to the file, as follows:
     }
 ```
 
-The loading of the classifier will be illustrated in the Classifying text using LingPipe
-section later in this chapter.
+关于如何加载序列化后的分类器，我们将在后续的`利用LingPipe进行文本分类`一节讨论。
 
-#### Using other training categories
+#### 使用其他的训练类别`Using other training categories`
 
-Other newsgroups data can be found at  http://qwone.com/~jason/20Newsgroups/ .
-These collections of data can be used to train other models as listed in the following
+其他邮件组的数据可以在<http://qwone.com/~jason/20Newsgroups/>内获得。
+这些数据可以用于训练获得的模型在下表中列出。
+These collections of data can be used to train other models as listed
+ in the following
 table. Although there are only 20 categories, they can be useful training models.
 Three different downloads are available where some have been sorted and in others,
 duplicate data has been removed:
@@ -615,16 +610,12 @@ duplicate data has been removed:
 +---------------------------+-----------------------+
 
 
+#### 利用LingPipe进行文本分类
 
-#### Classifying text using LingPipe
-
-To classify text, we will use the  DynamicLMClassifier class'  classify method.
-We will demonstrate its use with two different text sequences:
-•  forSale : The first is from  http://www.homes.com/for-sale/ where we use
-the first complete sentence
-•  martinLuther : The second is from  http://en.wikipedia.org/wiki/
-Martin_Luther where we use the first sentence of the second paragraph
-These strings are declared here:
+我们用`DynamicLMClassifier`类的`classify`方法来进行文本分类。
+这里我们用两组不同的示例文本进行验证：
+•  forSale : 数据来自<http://www.homes.com/for-sale/>的第一句话。
+•  martinLuther : 数据来自<http://en.wikipedia.org/wiki/Martin_Luther>第二段的第一句话。
 
 ```Java
     String forSale =
@@ -643,36 +634,34 @@ These strings are declared here:
         + "grace through faith in Jesus Christ as redeemer "
         + "from sin and subsequently eternity in Hell.";
 ```
-To reuse the classifier serialized in the previous section, use the
-AbstractExternalizable class'  readObject method as shown here. We will use the
-LMClassifier class instead of the  DynamicLMClassifier class. They both support the
-classify method but the  DynamicLMClassifier class is not readily serializable:
 
+为了复用之前训练得到的分类器，因为已经序列化到磁盘上，我们可以用`AbstractExternalizable`类的
+`readObject`方法将模型数据反序列化到内存对象中。
+这里反序列化后的对象我们选用的是`LMClassifier`，而不是`DynamicLMClassifier`，
+他们都支持`classify`方法，但是`DynamicLMClassifier`类不容易反序列化，这并不影响其分类功能使用。
 
 ```Java
     LMClassifier classifier = null;
     try {
-        classifier = (LMClassifier)
-        AbstractExternalizable.readObject(
-        new File("classifier.model"));
+        classifier = (LMClassifier) AbstractExternalizable.readObject(
+            new File("classifier.model"));
     } catch (IOException | ClassNotFoundException ex) {
         // Handle exceptions
     }
 ```
 
-In the next code sequence, we apply the  LMClassifier class'  classify method.
-This returns a  JointClassification instance, which we use to determine the
-best match:
+接下来，就是调用`LMClassifier`类的`classify`方法来进行文本分类。
+分类的结果是得到一个联合分类`JointClassification`实例。
+我们可以用其`bestCategory`方法来判断文本所属最佳匹配类别。
 
 ```Java
-    JointClassification classification =
-    classifier.classify(text);
+    JointClassification classification = classifier.classify(text);
     System.out.println("Text: " + text);
     String bestCategory = classification.bestCategory();
     System.out.println("Best Category: " + bestCategory);
 ```
 
-For the  forSale text, we get the following output:
+对于`forSale`例子，我们得到的结果是:
 
 ```
 Text: Finding a home for sale has never been easier. With Homes.com,
@@ -682,7 +671,7 @@ directory to work with a professional Realtor and find your perfect home.
 Best Category: misc.forsale
 ```
 
-For the  martinLuther text, we get the following output:
+对于`martinLuther`，我们的结果是：
 ```
 Text: Luther taught that salvation and subsequently eternity in heaven
 is not earned by good deeds but is received only as a free gift of God's
@@ -691,9 +680,9 @@ eternity in Hell.
 Best Category: soc.religion.christian
 ```
 
-They both correctly classified the text.
+我们可以看到文本被正确地分类了。
 
-#### Sentiment analysis using LingPipe
+#### 利用`LingPipe`进行情绪分析
 
 Sentiment analysis is performed in a very similar manner to that of general text
 classification. One difference is the use of only two categories: positive and negative.
