@@ -6,7 +6,7 @@
 
 文档可以基于任意多钟的属性来分类，例如文档的主题、文档的类型、发表时间、作者、使用的语言、以及适用的阅读水平等。有一些分类方法需要人工标记样本数据的介入。
 
-情感分析(Sentiment Analysis)，又称倾向性分析，意见抽取(Option extraction)，也是一种分类任务。它关注的是一份文档想要向读者传递什么，是正面的还是负面的？我们也会讨论相关的一些技术来实现这种分析。
+情绪分析(Sentiment Analysis)，又称倾向性分析，意见抽取(Option extraction)，也是一种分类任务。它关注的是一份文档想要向读者传递什么，是正面的还是负面的？我们也会讨论相关的一些技术来实现这种分析。
 
 ## 分类的应用
 
@@ -14,7 +14,7 @@
 
 * 垃圾邮件检测 (Spam detection)
 * 作者身份识别 (Authorship attribution)
-* 情感分析 (Sentiment analysis)
+* 情绪分析 (Sentiment analysis)
 * 年龄、性别的识别 (Age and gender identification)
 * 文档主题识别 (Determing the subject of a document)
 * 语种识别 (Language identification)
@@ -23,7 +23,7 @@
 
 分类也可被用于识别文档的作者身份。曾经有人通过已有的如《联邦党人文集》(The Federalist Papers)这样的作品，来识别出小说《原色》(Primary Colors)的作者真实身份。
 
-情感分析是一种判定文本中态度和观点的技术。影评是一种流行的方式，这种方法也可以应用在几乎所有的产品评价中。这可以帮助生产方更好的评估他们的产品在用户心中是怎样的感受。通常，文本被分类成消极或积极的类别。情感分析也被称为意见抽取(option extraction)、意见挖掘(option mining)和主观分析(subjectivity analysis)。典型的例子如，消费者对于股票市场的信心和交易可以通过微博和其他来源数据预测得到。
+情绪分析是一种判定文本中态度和观点的技术。影评是一种流行的方式，这种方法也可以应用在几乎所有的产品评价中。这可以帮助生产方更好的评估他们的产品在用户心中是怎样的感受。通常，文本被分类成消极或积极的类别。情绪分析也被称为意见抽取(option extraction)、意见挖掘(option mining)和主观分析(subjectivity analysis)。典型的例子如，消费者对于股票市场的信心和交易可以通过微博和其他来源数据预测得到。
 
 识别文档的主题，对于管理大量文档时是有帮助的。搜索引擎是非常关注这类技术的，但也会借鉴如标签云(tag cloud)的方式进行文档的简单归类。
 标签云展现的一组词语，体现了这些词语出现的相对频率大小。
@@ -35,30 +35,30 @@
 
 一段文字的语种识别也用到了分类技术。大量的NLP问题中，我们都需要针对不同的语言设计不同的模型，因此这种识别技术也是非常重要和常用的。
 
-## 理解情感分析
+## 理解情绪分析
 
-关于情感分析，我们关心的是对于一个特定产品或话题，什么人持有什么样的观点。这可以帮助我们了解一个城市的居民对于某支球队表现的态度，是积极还是负面的情感。有趣的是，人们可能对于球队表现和球队管理团队的态度可能是截然相反的。
+关于情绪分析，我们关心的是对于一个特定产品或话题，什么人持有什么样的观点。这可以帮助我们了解一个城市的居民对于某支球队表现的态度，是积极还是负面的情绪。有趣的是，人们可能对于球队表现和球队管理团队的态度可能是截然相反的。
 
 针对一种产品，若能够自动分析出人们对于产品不同方面、属性的态度，并以有意义的方式呈现出来，将会是有益的。下面一幅图，举例说明了从凯利蓝皮书(Kelly Blue Book,是美国著名的第三方独立的车友网站)网友调查得到的，关于丰田凯美瑞2014款车型的评价。
 
 ![2014-toyota-camry-expert-review](img/2014-toyota-camry-expert-review.png)
 
-我们可以看到，如车的总体评分(Overall Rating)、价格(Value)，都以条形图和数值的方式展现。而这些信息的获取和计算都可以通过情感分析来自动完成。
+我们可以看到，如车的总体评分(Overall Rating)、价格(Value)，都以条形图和数值的方式展现。而这些信息的获取和计算都可以通过情绪分析来自动完成。
 
-情感分析可以应用在句子中、从句中，还可以用于整篇文档。情感分析的结果不仅可以是表示积极或负面，还可以是以数值大小的评分，例如1到10之间的区间。More complex attitude types are possible.Further complicating the process, within a single sentence or document, different
+情绪分析可以应用在句子中、从句中，还可以用于整篇文档。情绪分析的结果不仅可以是表示积极或负面，还可以是以数值大小的评分，例如1到10之间的区间。More complex attitude types are possible.Further complicating the process, within a single sentence or document, different
 sentiments could be expressed against different topics.
 
-我们怎么知道不同的词语具有怎样的情感类型呢？答案就是通过情感词典(sentiment lexicons)，这个词典包含了不同词语在情感方面的含义。General Inquirer(<http://www.wjh.harvard.edu/~inquirer/>) 就是这样一种开源词典，其中包括了有1915个代表积极的此物，它还包括了一些如痛苦、喜悦、激烈和鼓动等方面的词语。MPQA Subjectivity Cues Lexicon(<http://mpqa.cs.pitt.edu/>)也是一种开源词库。
+我们怎么知道不同的词语具有怎样的情绪类型呢？答案就是通过情绪词典(sentiment lexicons)，这个词典包含了不同词语在情绪方面的含义。General Inquirer(<http://www.wjh.harvard.edu/~inquirer/>) 就是这样一种开源词典，其中包括了有1915个代表积极的此物，它还包括了一些如痛苦、喜悦、激烈和鼓动等方面的词语。MPQA Subjectivity Cues Lexicon(<http://mpqa.cs.pitt.edu/>)也是一种开源词库。
 
 有时候我们可能希望建立一个词典，这通常可以通过半监督学习的方式，借鉴少量标记的样本或规则来引导整个词典的建立。
 当我们面临的问题没有很适合的词典时，这种方法是特别有用的。
 
-我们不仅仅关注情感是积极的还是负面的，我们对于确定情感的属性（有时候称为情感目标）同样感兴趣。参考下面的例子：
+我们不仅仅关注情绪是积极的还是负面的，我们对于确定情绪的属性（有时候称为情绪目标）同样感兴趣。参考下面的例子：
 
 >"The ride was very rough but the attendants did an excellent job of making us comfortable."
 虽然我们乘坐的交通工具非常简陋，但是上面的服务员提供的超乎想像的服务令我们感到非常舒适。
 
-这句话包含了两种感受：简陋和舒适。前者是负面的，后者是正面的。这些情感或感受的属性或称为目标，分别来自于交通工具和服务。
+这句话包含了两种感受：简陋和舒适。前者是负面的，后者是正面的。这些情绪或感受的属性或称为目标，分别来自于交通工具和服务。
 
 ## 文本分类技术
 
@@ -248,10 +248,10 @@ dog[0.2896] cat[0.7104]
 ### 使用斯坦福API(Using Stanford API)
 
 斯坦福API提供了若干种分类器。
-我们将分别试用`ColumnDataClassifier`类和`StanfordCoreNLP`管线(pipeline)
-进行文本分类和情感分析。斯坦福API提供的分类器有时会比较难使用。在这里，
+我们将分别试用`ColumnDataClassifier`类和`StanfordCoreNLP`的pipeline
+进行文本分类和情绪分析。斯坦福API提供的分类器有时会比较难使用。在这里，
 我们将以归类箱子大小为例来展示如何使用`ColumnDataClassifier`。 
-对于管线，我们将示例如何对短语进行正向或负向情感的判定。
+对于pipeline，我们将示例如何对短语进行正向或负向情绪的判定。
 该工具可以从链接<http://nlp.stanford.edu/software/classifier.shtml>上下载得到。
 
 #### 使用`ColumnDataClassifier`类进行分类(Using the ColumnDataClassifier class for classification)
@@ -390,9 +390,9 @@ string数组来描述一个样本，第一个字符串表示的样本的类别�
 Category: large
 ```
 
-#### 利用斯坦福管线进行情感分析(Using the Stanford pipeline to perform sentiment analysis)
+#### 利用斯坦福 pipeline 进行情绪分析(Using the Stanford pipeline to perform sentiment analysis)
 
-本节描述如何使用斯坦福API进行情感分析。API中的`StanfordCoreNLP`库提供了管线(`pipeline`)来帮助文本分析。
+本节描述如何使用斯坦福的API进行情绪分析。API中的`StanfordCoreNLP`库提供了`pipeline`来帮助文本分析。
 
 我们选取了电影《阿甘正传》(Forrest Gump)的三条影评内容进行实验，
 数据来源是`Rotten Tomatoes`(< http://www.rottentomatoes.com/m/forrest_gump/ >)：
@@ -412,11 +412,9 @@ Category: large
         + "chocolate pie.";
 ```
 
-
-To perform this analysis, we need to use a sentiment  annotator as shown here.
-This also requires the use of the  tokenize ,  ssplit and  parse annotators. The
-parse annotator provides more structural information about the text, which will
-be discussed in more detail in Chapter 7, Using a Parser to Extract Relationships:
+在做这个分析之前，我们需要申明使用哪些注释器，
+这里包括了分词(tokenize)、分句(ssplit, sentence splitting)、解析(parse)、情绪(sentiment)注释器。
+parse注释器提供了更多的文本结构信息，详细内容见第7章，此处我们用parse annotator来提取关系。
 
 ```Java
     Properties props = new Properties();
@@ -424,36 +422,59 @@ be discussed in more detail in Chapter 7, Using a Parser to Extract Relationship
     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 ```
 
-The text is used to create an  Annotation instance, which is then used as the
-argument to the  annotate method that performs the actual work, as shown here:
-
+我们用`review`文本来构建一个`Annotation`实例，该实例将用于`pipeline`的annotation方法，
+完成实际的注释工作就靠该实例了。代码示例如下：
 
 ```Java
     Annotation annotation = new Annotation(review);
     pipeline.annotate(annotation);
 ```
 
+下面的数组包括了可能的情绪，依次是`非常否定`、`否定`、`中立`、`肯定`和`非常肯定`五种。
+
 ```Java
     String[] sentimentText = {"Very Negative", "Negative",
         "Neutral", "Positive", "Very Positive"};
 ```
 
+The  Annotation class'  get method returns an object that implements the  CoreMap
+interface. In this case, these objects represent the results of splitting the input text
+into sentences, as shown in the following code. For each sentence, an instance of
+a  Tree object is obtained that represents a tree structure containing a parse of the
+text for the sentiment. The  getPredictedClass method returns an index into the
+sentimentText array reflecting the sentiment of the test:
+
+Annotation类的`get`方法返回的对象实现了CoreMap接口。该方法实现了将输入文本分割成多条句子。
+对于每一条句子，`sentence.get`方法返回一个Tree对象，该对象描述了输入语句的树形结构，结构中包括了情绪的分析结果。
+`getPredictedClass`方法则返回一个情绪的评分结果。最后通过`sentimentText`数组将数值结果映射成度量情绪的文本输出。
+
 ```Java
-    for (CoreMap sentence : annotation.get(
-        CoreAnnotations.SentencesAnnotation.class)) {
-        Tree tree = sentence.get(
-        SentimentCoreAnnotations.AnnotatedTree.class);
+    for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
+        Tree tree = sentence.get(SentimentCoreAnnotations.AnnotatedTree.class);
         int score = RNNCoreAnnotations.getPredictedClass(tree);
         System.out.println(sentimentText[score]);
     }
 ```
+针对本例子中的`review`文本，上述代码执行结果是：
+```
+Positive
+```
+而`sam`包括了三条句子，我们得到每条语句的情绪分析结果依次是：
+```
+Neutral
+Negative
+Neutral
+```
 
-
-
+`mary`包括的两句文本，其情绪分析结果是：
+```
+Positive
+Neutral
+```
 
 ### 用`LingPipe`进行文本分类(Using LingPipe to classify text)
 
-本节我们将利用`LingPipe`进行各种分类任务，包括了一般的文本分类，以及情感分析和语种检测。
+本节我们将利用`LingPipe`进行各种分类任务，包括了一般的文本分类，以及情绪分析和语种检测。
  We will cover the following classification topics:
 * Training text using the  Classified class
 * Training models using other training categories
@@ -862,11 +883,11 @@ extracting relationships from text.
 
 * Spam detection  垃圾邮件检测
 * Authorship attribution 作者身份识别
-* Sentiment Analysis  情感分析
+* Sentiment Analysis  情绪分析
 * Language identification 语种识别
 * option extraction 意见抽取
 * option mining 意见挖掘
 * subjectivity analysis 主观分析
 * tag cloud  标签云
-* sentiment lexicons 情感词典
+* sentiment lexicons 情绪词典
 * Classifier 分类器
